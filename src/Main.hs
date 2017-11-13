@@ -10,7 +10,9 @@ import           System.Environment    (getEnv)
 main :: IO ()
 main = do
   appId <- getEnv "YOLP_APP_ID"
-  initReq <- HS.parseRequest "https://map.yahooapis.jp/weather/V1/place?coordinates=139.732293,35.663613&output=json"
+  let lon = "35.658034"
+      lat = "139.701636"
+  initReq <- HS.parseRequest $ "https://map.yahooapis.jp/weather/V1/place?output=json&coordinates=" ++ lat ++ "," ++ lon
   let userAgent = S8.pack $ "Yahoo AppID: " ++ appId
       req = HS.setRequestHeaders [("User-Agent", userAgent)] initReq
   response <- HS.httpJSON req
