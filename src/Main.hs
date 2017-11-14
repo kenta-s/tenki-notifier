@@ -11,12 +11,12 @@ import           Data.Text
 import           GHC.Generics
 
 data WeatherListWrapper = WeatherListWrapper {
-  list :: WeatherList
+  list :: [WeatherList]
 } deriving (Generic, Show)
 instance FromJSON WeatherListWrapper
 
 data WeatherList = WeatherList {
-  weather :: Weather,
+  weather :: [Weather],
   dt_txt :: Text
 } deriving (Generic, Show)
 instance FromJSON WeatherList
@@ -24,9 +24,9 @@ instance FromJSON WeatherList
 data Weather = Weather {
   mainInfo :: Text,
   description :: Text
-} deriving (Generic, Show)
+} deriving (Show)
 instance FromJSON Weather where
-    parseJSON (Object v) = Weather <$> (v .: "main") <*> (v .: "description")
+  parseJSON (Object v) = Weather <$> (v .: "main") <*> (v .: "description")
 
 main :: IO ()
 main = do
@@ -34,4 +34,5 @@ main = do
   let tokyoId = "1850147"
   req <- HS.parseRequest $ "http://api.openweathermap.org/data/2.5/forecast?id=" ++ tokyoId ++ "&APPID=" ++ appId
   response <- HS.httpJSON req
-  print $ list (HS.getResponseBody response)
+  let weatherList = (HS.getResponseBody response :: WeatherListWrapper)
+  print $ list weatherList
