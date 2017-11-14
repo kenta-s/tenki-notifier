@@ -35,4 +35,10 @@ main = do
   req <- HS.parseRequest $ "http://api.openweathermap.org/data/2.5/forecast?id=" ++ tokyoId ++ "&APPID=" ++ appId
   response <- HS.httpJSON req
   let weatherList = (HS.getResponseBody response :: WeatherListWrapper)
-  print $ list weatherList
+  printWeathers $ list weatherList
+
+printWeathers :: [WeatherList] -> IO ()
+printWeathers [x] = print x
+printWeathers (x:xs) = do
+  print x
+  printWeathers xs
