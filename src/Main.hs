@@ -38,7 +38,13 @@ main = do
   printWeathers $ list weatherList
 
 printWeathers :: [WeatherList] -> IO ()
-printWeathers [x] = print x
+printWeathers [x] = putStrLn $ printWeather x
 printWeathers (x:xs) = do
-  print x
+  putStrLn $ printWeather x
   printWeathers xs
+
+printWeather :: WeatherList -> String
+printWeather weatherList =
+  "     " ++ (unpack weat) ++ " :::: " ++ (unpack time)
+  where time = dt_txt weatherList
+        weat = mainInfo $ Prelude.head $ weather weatherList
