@@ -45,6 +45,7 @@ printWeathers (x:xs) = do
 
 printWeather :: WeatherList -> String
 printWeather weatherList =
-  "     " ++ (unpack weat) ++ " :::: " ++ (unpack time)
+  "    |  " ++ (unpack weat) ++ appendSpaces ++ "|  " ++ (unpack time) ++ "  |"
   where time = dt_txt weatherList
         weat = mainInfo $ Prelude.head $ weather weatherList
+        appendSpaces = Prelude.concat $ Prelude.replicate (8 - Data.Text.length weat) " "
